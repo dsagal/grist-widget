@@ -124,7 +124,7 @@ function updateMap(data) {
     }
   }
   const map = L.map('map', {layers: [tiles]});
-  const markers = L.markerClusterGroup();
+  const markers = L.markerClusterGroup({disableClusteringAtZoom: 5, spiderfyOnMaxZoom: false});
   const points = [];
   popups = {};
   for (const rec of data) {
@@ -163,9 +163,23 @@ function selectOnMap(rec) {
     updateMap([rec]);
     scanOnNeed();
   } else {
-    updateMap();
+    // updateMap();
+    if (selectedRowId && popups[selectedRowId]) {
+      var marker = popups[selectedRowId];
+      // if (!marker._icon) { marker.__parent.spiderfy(); }
+      const {id, name, lng, lat} = getInfo(rec);
+      if (String(lng) !== '...' && !(Math.abs(lat) < 0.01 && Math.abs(lng) < 0.01)) {
+        const pt = new L.LatLng(lat, lng);
+        amap.fitBounds(new L.LatLngBounds([pt]), {maxZoom: 12, padding: [0, 0]});
+      }
+      marker.openPopup();
+    }
   }
 }
+
+document.getElementById('home').addEventListener('click', (ev) => {
+  amap?.setZoom(2);
+});
 
 grist.on('message', (e) => {
   if (e.tableId) { selectedTableId = e.tableId; }
