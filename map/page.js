@@ -152,7 +152,7 @@ function updateMap(data) {
   const rowId = selectedRowId;
   if (rowId && popups[rowId]) {
     var marker = popups[rowId];
-    if (!marker._icon) { marker.__parent.spiderfy(); }
+    // if (!marker._icon) { marker.__parent.spiderfy(); }
     marker.openPopup();
   }
 }
@@ -178,7 +178,7 @@ function selectOnMap(rec) {
 }
 
 document.getElementById('home').addEventListener('click', (ev) => {
-  amap?.setZoom(2);
+  amap?.setZoom(3);
 });
 
 grist.on('message', (e) => {
